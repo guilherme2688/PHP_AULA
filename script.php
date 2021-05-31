@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 
 $categorias = [];
 $categorias[] = 'infantil';
@@ -11,20 +13,20 @@ $nome = $_POST['nome'];
 $idade = $_POST['idade'];
 
 if (empty($nome)) {
-    echo 'O nome não pode ser vazio';
+    $_SESSION['mensagem-de-erro'] = 'O nome não pode ser vazio, por favor preencha-o novamente';
+    Header('Location:index.php');
     return;
-}
-
-if (strlen($nome) < 3) {
-    echo 'O nome deve conter mais de 3 caracteres';
+} else if (strlen($nome) < 3) {
+    $_SESSION['mensagem-de-erro'] = 'O nome deve conter mais de 3 caracteres';
+    Header('Location:index.php');
     return;
-}
-if (strlen($nome) > 40) {
-    echo 'O nome é muito extenso';
+} else if (strlen($nome) > 40) {
+    $_SESSION['mensagem-de-erro'] = 'O nome é muito extenso';
+    Header('Location:index.php');
     return;
-}
-if (!is_numeric($idade)) {
-    echo 'Informe um numero para idade';
+} else if (!is_numeric($idade)) {
+    $_SESSION['mensagem-de-erro'] = 'Informe um numero para idade';
+    Header('Location:index.php');
     return;
 }
 
@@ -32,16 +34,21 @@ if (!is_numeric($idade)) {
 if ($idade >= 6 && $idade <= 12) {
     for ($i = 0; $i <= count($categorias); $i++) {
         if ($categorias[$i] == 'infantil')
-            echo "O nadador " . $nome . " compete na categoria infantil";
+            $_SESSION['mensagem-de-sucesso'] = "O nadador " . $nome . "compete na categoria " . $categorias[$i];
+        Header('Location:index.php');
+        return;
     }
 } else if ($idade >= 13 && $idade <= 18) {
     for ($i = 0; $i <= count($categorias); $i++) {
         if ($categorias[$i] == 'adolescente')
-            echo "O nadador " . $nome . " compete na categoria adolescente";
+            $_SESSION['mensagem-de-sucesso'] = "O nadador " . $nome . "compete na categoria " . $categorias[$i];
+        Header('Location:index.php');
+        return;
     }
 } else {
     for ($i = 0; $i <= count($categorias); $i++) {
         if ($categorias[$i] == 'adulto')
-            echo "O nadador " . $nome . " compete na categoria adulto";
+            $_SESSION['mensagem-de-erro'] = "O nadador " . $nome . "compete na categoria " . $categorias[$i];
+        Header('Location:index.php');
     }
 }
